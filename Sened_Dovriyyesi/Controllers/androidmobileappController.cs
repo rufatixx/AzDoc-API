@@ -11,27 +11,27 @@ using Microsoft.Extensions.Configuration;
 
 namespace Sened_Dovriyyesi.Controllers
 {
-    public class users
-    {
-        public string name { get; set; }
-        public string surname { get; set; }
-    }
+    
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowOrigin")]
     public class androidmobileappController : ControllerBase
     {
-        private readonly IConfiguration configuration;
+        public IConfiguration Configuration;
+        public androidmobileappController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         [HttpGet]
         [Route("users")]
         [EnableCors("AllowOrigin")]
-        public ActionResult<List<users>> getUsers(string name, string surname)
+        public ActionResult<List<model.User>> getUsers(string name, string surname)
         {
-            List<users> users = new List<users>
+            List<model.User> users = new List<model.User>
         {
-            new users { name="Rufat", surname="Asadov" },
-            new users { name="Sabina", surname="Aghayeva" },
-            new users { name=name, surname=surname }
+            new model.User { name="Rufat", password="Asadov" },
+            new model.User { name="Sabina", password="Aghayeva" },
+            new model.User { name=name, password=surname }
         };
 
             return users;
@@ -75,21 +75,28 @@ namespace Sened_Dovriyyesi.Controllers
             }
 
         }
-        
-     
+
+
 
         [HttpGet]
-        [Route("database_test")]
+        [Route("user/login")]
         [EnableCors("AllowOrigin")]
-        public ActionResult<string> database_test()
+        public ActionResult <List<model.User>> log_in(string username,string pass)
         {
-            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-            SqlCommand com = new SqlCommand("Select UserName from DC_USER limit 1",connection);
-            string name = (string)com.ExecuteScalar();
-            connection.Close();
-        return name;
-           }
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(pass))
+            {
+                return null;
+            }
+            else
+            {
+
+
+                List<model.User> user = new List<model.User>();
+                model.db_select select = new model.db_select(Configuration);
+                user = select.log_in(username, pass);
+
+                return user;
+            }
+        }
     }
 }

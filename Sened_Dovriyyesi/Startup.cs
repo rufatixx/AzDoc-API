@@ -25,14 +25,23 @@ namespace Sened_Dovriyyesi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
+            services.AddCors(c =>  
+            {  
+                c.AddPolicy("AllowOrigin", options => options.WithOrigins("https://localhost:44342"));  
+            });
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           
+            app.UseCors(options => options.AllowAnyOrigin());
+            app.UseCors(options => options.WithOrigins("https://localhost:44342"));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
