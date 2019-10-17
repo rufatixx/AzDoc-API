@@ -23,7 +23,7 @@ namespace Sened_Dovriyyesi.model
 
             connection.Open();
 
-            SqlCommand com = new SqlCommand("Select * from DC_USER where UserStatus=1 and UserName=@login and UserPassword=@pass", connection);
+            SqlCommand com = new SqlCommand("Select * from VW_Users where UserStatus=1 and UserName=@login and UserPassword=@pass", connection);
             com.Parameters.AddWithValue("@login", username);
             com.Parameters.AddWithValue("@pass", password);
 

@@ -85,7 +85,8 @@ namespace Sened_Dovriyyesi.Controllers
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(pass))
             {
-                return null;
+                List<model.User> empty = new List<model.User>();
+                return empty;
             }
             else
             {
