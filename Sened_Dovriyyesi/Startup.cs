@@ -31,7 +31,7 @@ namespace Sened_Dovriyyesi
             });
             services.AddCors(c =>  
             {  
-                c.AddPolicy("AllowOrigin", options => options.WithOrigins("https://localhost:44342"));  
+                c.AddPolicy("AllowOrigin", options => options.WithOrigins("*"));  
             });
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -41,7 +41,7 @@ namespace Sened_Dovriyyesi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors(options => options.AllowAnyOrigin());
-            app.UseCors(options => options.WithOrigins("https://localhost:44342"));
+            app.UseCors(options => options.WithOrigins("*"));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

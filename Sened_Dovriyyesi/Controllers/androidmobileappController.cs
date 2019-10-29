@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 
 namespace Sened_Dovriyyesi.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowOrigin")]
@@ -22,56 +18,24 @@ namespace Sened_Dovriyyesi.Controllers
         {
             Configuration = configuration;
         }
-        [HttpGet]
-        [Route("users")]
-        [EnableCors("AllowOrigin")]
-        public ActionResult<List<model.User>> getUsers(string name, string surname)
-        {
-            List<model.User> users = new List<model.User>
-        {
-            new model.User { name="Rufat", password="Asadov" },
-            new model.User { name="Sabina", password="Aghayeva" },
-            new model.User { name=name, password=surname }
-        };
 
-            return users;
-        }
         [HttpGet]
-        [Route("docs")]
+        [Route("get_not_read_docs")]
         [EnableCors("AllowOrigin")]
-        public ActionResult<model.docs> getDocs(string id)
+        public ActionResult<List<model.docs>> getNotReadtDocs(string username, string pass, string workplaceID)
         {
-            if (string.IsNullOrEmpty(id))
+            List<model.docs> not_read = new List<model.docs>();
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(pass) || string.IsNullOrEmpty(workplaceID))
             {
-                return null;
+
+                return not_read;
             }
             else
             {
-                try
-                {
-                    model.docs finded_doc = null;
-                    List<model.docs> docs = new List<model.docs>
-        {
-            new model.docs { id =1, name="dfoewkdpoewk" },
-            new model.docs { id=5, name="lmlckamlmc" },
-            new model.docs { id=8, name="dslcmlwkdm" }
-        };
-                    foreach (var item in docs)
-                    {
-                        if (item.id == Convert.ToInt32(id))
-                        {
-                            finded_doc = item;
 
-                        }
-
-                    }
-                    return finded_doc;
-                }
-                catch
-                {
-
-                    return null;
-                }
+                model.db_select select = new model.db_select(Configuration);
+                not_read = select.get_not_read_docs(username, pass, workplaceID);
+                return not_read;
             }
 
         }
@@ -81,23 +45,39 @@ namespace Sened_Dovriyyesi.Controllers
         [HttpGet]
         [Route("user/login")]
         [EnableCors("AllowOrigin")]
-        public ActionResult <List<model.User>> log_in(string username,string pass)
+        public ActionResult<List<model.User>> log_in(string username, string pass)
         {
+            List<model.User> user = new List<model.User>();
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(pass))
             {
-                List<model.User> empty = new List<model.User>();
-                return empty;
+
+                return user;
             }
             else
             {
 
 
-                List<model.User> user = new List<model.User>();
+
                 model.db_select select = new model.db_select(Configuration);
                 user = select.log_in(username, pass);
 
                 return user;
             }
         }
+        [HttpGet]
+        [Route("get_Menu")]
+        [EnableCors("AllowOrigin")]
+        public ActionResult<List<model.menu>> get_Menu()
+        {
+
+
+
+            List<model.menu> menu = new List<model.menu>();
+            model.db_select select = new model.db_select(Configuration);
+            menu = select.menu();
+            return menu;
+
+        }
+
     }
 }
