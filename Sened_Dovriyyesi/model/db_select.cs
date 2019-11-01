@@ -64,7 +64,7 @@ namespace Sened_Dovriyyesi.model
             }
 
         }
-        public List<docs> get_not_read_docs(string username, string password,string workplaceID)
+        public List<docs> get_not_read_docs(string username, string password,int workplaceID,int pageIndex)
         {
 
 
@@ -74,12 +74,13 @@ namespace Sened_Dovriyyesi.model
 
             connection.Open();
 
-            SqlCommand com = new SqlCommand("mobile.spUnReadedDocs", connection);
+            SqlCommand com = new SqlCommand("mobile.spgetdocs", connection);
             com.CommandType = CommandType.StoredProcedure;
 
             com.Parameters.AddWithValue("@login", username);
             com.Parameters.AddWithValue("@pass", password);
-            com.Parameters.AddWithValue("@executorWorkplaceID", workplaceID);
+            com.Parameters.AddWithValue("@WorkplaceID", workplaceID);
+            com.Parameters.AddWithValue("@pageIndex", pageIndex);
 
             SqlDataReader reader = com.ExecuteReader();
             if (reader.HasRows)
@@ -91,12 +92,12 @@ namespace Sened_Dovriyyesi.model
 
                     docs doc = new docs();
                     doc.ID = Convert.ToInt32(reader["docid"]);
-                    doc.DirectionTypeName = reader["DirectionTypeName"].ToString();
+                   
                     doc.DocEnterNo = reader["DocEnterNo"].ToString();
+                    doc.Signer = reader["Signer"].ToString();
                     doc.DocEnterdate = reader["DocEnterdate"].ToString(); 
-                    doc.DocumentStatusID =Convert.ToInt32(reader["DocumentStatusID"].ToString());
                     doc.DocumentStatusName = reader["DocumentStatusName"].ToString();
-                    doc.DocControlStatusID= Convert.ToInt32(reader["DocControlStatusID"].ToString());
+                    doc.DocControlStatusID= Convert.ToInt32(reader["ExecutorControlStatus"]);
 
                     docs_list.Add(doc);
 

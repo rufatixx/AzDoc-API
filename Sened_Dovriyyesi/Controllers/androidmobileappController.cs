@@ -22,10 +22,10 @@ namespace Sened_Dovriyyesi.Controllers
         [HttpGet]
         [Route("get_not_read_docs")]
         [EnableCors("AllowOrigin")]
-        public ActionResult<List<model.docs>> getNotReadtDocs(string username, string pass, string workplaceID)
+        public ActionResult<List<model.docs>> getNotReadtDocs(string username, string pass, int workplaceID, int pageIndex)
         {
             List<model.docs> not_read = new List<model.docs>();
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(pass) || string.IsNullOrEmpty(workplaceID))
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(pass) || workplaceID<1||pageIndex<1)
             {
 
                 return not_read;
@@ -34,7 +34,7 @@ namespace Sened_Dovriyyesi.Controllers
             {
 
                 model.db_select select = new model.db_select(Configuration);
-                not_read = select.get_not_read_docs(username, pass, workplaceID);
+                not_read = select.get_not_read_docs(username, pass, workplaceID,pageIndex);
                 return not_read;
             }
 
