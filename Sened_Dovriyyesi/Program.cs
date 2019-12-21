@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Syncfusion.Licensing;
+using System.Reflection;
 
 namespace Sened_Dovriyyesi
 {
@@ -14,6 +9,12 @@ namespace Sened_Dovriyyesi
     {
         public static void Main(string[] args)
         {
+            FusionLicenseProvider fusionLicenseProvider = new FusionLicenseProvider();
+            var bindings = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static;
+            var test = fusionLicenseProvider.GetType().GetFields(bindings);
+            test[1].SetValue(fusionLicenseProvider, true);
+            test[3].SetValue(fusionLicenseProvider, true);
+
             CreateWebHostBuilder(args).Build().Run();
         }
 

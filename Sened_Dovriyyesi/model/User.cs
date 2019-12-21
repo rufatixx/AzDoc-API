@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Sened_Dovriyyesi.model
+﻿namespace Sened_Dovriyyesi.model
 {
     public class User
     {
